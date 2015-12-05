@@ -1,0 +1,29 @@
+{
+  "name": "injektor",
+  "version": "0.0.7",
+  "description": "The simple dependency injection for Devebot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/devebot/injektor.git"
+  },
+  "keywords": [
+    "dependency",
+    "injection",
+    "devebot"
+  ],
+  "author": "Hung Pham <pnhung177@acegik.net> (http://acegik.net/blog)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/devebot/injektor/issues"
+  },
+  "homepage": "https://github.com/devebot/injektor#readme",
+  "devDependencies": {
+    "chai": "^3.4.1",
+    "mocha": "^2.3.4",
+    "sinon": "^1.17.2"
+  }
+}
