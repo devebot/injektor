@@ -16,7 +16,14 @@ MyResource.argumentSchema = {
   "type": "object",
   "properties": {
     "fullname": { "type": "string" },
-    "document": { "type": "object" }
+    "document": { 
+      "type": "object",
+      "properties": {
+        "type": { "type": "string" },
+        "content": {"type": "string" },
+        "price": { "type": "number" }
+      }
+    }
   }
 };
 
@@ -24,7 +31,8 @@ injektor.defineService('myResource', MyResource)
     .registerObject('fullname', 'Peter Pan')
     .registerObject('document', { 
       type: 'Book',
-      content: 'Peter and Wendy'
+      content: 'Story about Peter and Wendy',
+      price: 17.7
     });
 
 injektor.lookup('myResource').process('open');

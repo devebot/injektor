@@ -1,5 +1,25 @@
-var InjektorClass = function InjektorClass() {
+'use strict';
 
+var Validator = require('jsonschema').Validator;
+var validator = new Validator();
+
+var errors = require('./errors.js');
+
+var noop = function() {};
+
+var defaultConfig = {
+  argumentSchemaName: 'argumentSchema',
+  logger: { debug: noop, trace: noop, error: noop }
+};
+
+var InjektorClass = function InjektorClass(params) {
+  params = params || {};
+  
+  var config = {};
+  Object.keys(defaultConfig).forEach(function(key) {
+    config[key] = params[key] || defaultConfig[key];
+  });
+  
   var dependencies = {};
 
   /**
@@ -9,7 +29,7 @@ var InjektorClass = function InjektorClass() {
   function retrieve(name) {
     var record = dependencies[name];
     if (record == null) {
-        throw new Error('No service registered with name: ' + name);
+        throw new errors.DependencyNotFoundError('No dependency registered with name: ' + name);
     }
     if (record['cache'] == null) convert(name);
     return record['cache'];
@@ -42,8 +62,8 @@ var InjektorClass = function InjektorClass() {
    * Extracts the dependencies of a constructor
    */
   function getDependencies(fn) {
-    if (fn.argumentSchema) {
-      var schema = fn.argumentSchema;
+    if (fn[config.argumentSchemaName]) {
+      var schema = fn[config.argumentSchemaName];
       if (schema instanceof Object && !(schema instanceof Array) &&
           schema.properties instanceof Object && !(schema.properties instanceof Array)) {
         var paramObject = {};
@@ -51,19 +71,23 @@ var InjektorClass = function InjektorClass() {
         for(var i=0; i<paramNames.length; i++) {
           paramObject[paramNames[i]] = retrieve(paramNames[i]);
         }
+        var result = validator.validate(paramObject, schema);
+        if (result.errors.length > 0) {
+          throw new errors.ValidatingArgumentError('Constructor argument validation is failed');
+        }
         return [paramObject];
       } else {
-        throw new Error('constructor_has_invalid_argumentSchema');
+        throw new errors.InvalidArgumentSchemaError('Constructor has invalid argument schema');
       }
     } else {
-      var params = getParameters(fn);
+      var params = extractArgumentNames(fn);
       return params.map(function(value) {
         return retrieve(value);
       });
     }
   }
 
-  function getParameters(fn) {
+  function extractArgumentNames(fn) {
     var args = fn.toString()
       .replace(/((\/\/.*$)|(\/\*[\s\S]*?\*\/)|(\s))/mg,'')
       .match(/^function\s*[^\(]*\(\s*([^\)]*)\)/m)[1]
@@ -101,8 +125,8 @@ var InjektorClass = function InjektorClass() {
   this.invoke = function(target) {
     target.apply(target, getDependencies(target));
   };
-
-  return this;
 };
+
+InjektorClass.errors = errors;
 
 module.exports = InjektorClass;
