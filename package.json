@@ -1,11 +1,10 @@
 {
   "name": "injektor",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "The simple dependency injection for Devebot",
   "main": "index.js",
   "scripts": {
-    "test": "npm run utest",
-    "utest": "./node_modules/.bin/mocha test/*-test.js"
+    "test": "node_modules/.bin/mocha test/*-test.js"
   },
   "repository": {
     "type": "git",
@@ -16,7 +15,10 @@
     "injection",
     "devebot"
   ],
-  "author": "Hung Pham <pnhung177@acegik.net> (http://acegik.net/blog)",
+  "author": {
+    "name": "Hung Pham",
+    "email": "pnhung177@acegik.net"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/devebot/injektor/issues"

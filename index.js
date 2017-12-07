@@ -9,6 +9,7 @@ var noop = function() {};
 
 var defaultConfig = {
   argumentSchemaName: 'argumentSchema',
+  argumentLineupName: 'argumentLineup',
   logger: { debug: noop, trace: noop, error: noop }
 };
 
@@ -77,7 +78,18 @@ var InjektorClass = function InjektorClass(params) {
         }
         return [paramObject];
       } else {
-        throw new errors.InvalidArgumentSchemaError('Constructor has invalid argument schema');
+        throw new errors.InvalidArgumentSchemaError('Constructor has invalid argument schema descriptor');
+      }
+    } if (fn[config.argumentLineupName]) {
+      var lineupInject = fn[config.argumentLineupName];
+      if (lineupInject instanceof Array) {
+        var paramArray = [];
+        for(var i=0; i<lineupInject.length; i++) {
+          paramArray.push(retrieve(lineupInject[i]));
+        }
+        return paramArray;
+      } else {
+        throw new errors.InvalidArgumentSchemaError('Constructor has invalid argument lineup descriptor');
       }
     } else {
       var params = extractArgumentNames(fn);
