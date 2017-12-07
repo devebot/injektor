@@ -1,7 +1,6 @@
 'use strict';
 
 var Validator = require('./lib/validator');
-var validator = new Validator();
 
 var errors = require('./errors.js');
 
@@ -20,7 +19,9 @@ var InjektorClass = function InjektorClass(params) {
   Object.keys(defaultConfig).forEach(function(key) {
     config[key] = params[key] || defaultConfig[key];
   });
-  
+
+  var validator = new Validator();
+
   var dependencies = {};
 
   /**
@@ -73,7 +74,7 @@ var InjektorClass = function InjektorClass(params) {
           paramObject[paramNames[i]] = retrieve(paramNames[i]);
         }
         var result = validator.validate(paramObject, schema);
-        if (result.errors.length > 0) {
+        if (!result.ok) {
           throw new errors.ValidatingArgumentError('Constructor argument validation is failed');
         }
         return [paramObject];
