@@ -1,8 +1,7 @@
 'use strict';
 
+var errors = require('./lib/errors.js');
 var Validator = require('./lib/validator');
-
-var errors = require('./errors.js');
 
 var noop = function() {};
 
