@@ -26,10 +26,7 @@ describe('schema_annotation:', function() {
 
 				Object.defineProperty(this, 'state', {
 					get: function() {
-						return {
-							name: name,
-							payload: payload
-						}
+						return params
 					}
 				});
 			};
@@ -99,7 +96,9 @@ describe('schema_annotation:', function() {
 					type: 'Book',
 					content: 'Story about Peter and Wendy',
 					price: 17.7
-				}
+				},
+				parameter1: {},
+				parameter2: {}
 			});
 
 			var msg = myAction.process('insertDocument');
