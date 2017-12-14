@@ -1,3 +1,5 @@
+'use strict';
+
 var Injektor = require('../index.js');
 var injektor = new Injektor();
 
