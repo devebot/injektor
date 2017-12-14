@@ -8,7 +8,7 @@ With injektor (and almost of dependency injection libraries), one can manage the
 
 Install injektor module:
 
-```
+```shell
 $ npm install --save injektor
 ```
 

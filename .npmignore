@@ -2,3 +2,5 @@ examples/
 node_modules/
 test/
 tests/
+.gitignore
+.npmignore
