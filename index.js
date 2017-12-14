@@ -1,7 +1,7 @@
 'use strict';
 
-var errors = require('./lib/errors.js');
-var Injektor = require('./lib/injektor');
+var errors = require('./lib/errors');
+var Injektor = require('./lib/engine');
 
 Injektor.errors = errors;
 
