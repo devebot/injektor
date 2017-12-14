@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/devebot/injektor#readme",
   "devDependencies": {
-    "chai": "^3.4.1",
+    "chai": "^4.1.2",
     "debug": "^3.1.0",
     "mocha": "^3.5.3",
     "sinon": "^1.17.3"
