@@ -59,8 +59,7 @@ describe('service_argument_schema:', function() {
 			}
 
 			Parameter1.argumentSchema = {
-				"type": "object",
-				"properties": {}
+				"type": "object"
 			}
 
 			Parameter2 = function(params) {
@@ -68,8 +67,7 @@ describe('service_argument_schema:', function() {
 			}
 
 			Parameter2.argumentSchema = {
-				"type": "object",
-				"properties": {}
+				"type": "object"
 			}
 		});
 

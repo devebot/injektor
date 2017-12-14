@@ -17,6 +17,10 @@ injektor
 injektor
   .registerObject('steps', [
     'clean', 'boil', 'peel', 'eat'
-  ]).registerObject('object', 'Eggs');
+  ])
+  .registerObject('object', 'Eggs');
 
-injektor.lookup('recipe').action('Peter Pan');
+injektor
+  .invoke(['recipe', function(rp) {
+    rp.action('Peter Pan');
+  }]);

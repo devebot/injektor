@@ -39,8 +39,7 @@ describe('service_reference_array:', function() {
 			}
 
 			Parameter1.argumentSchema = {
-				"type": "object",
-				"properties": {}
+				"type": "object"
 			}
 
 			Parameter2 = function(params) {
@@ -48,8 +47,7 @@ describe('service_reference_array:', function() {
 			}
 
 			Parameter2.argumentSchema = {
-				"type": "object",
-				"properties": {}
+				"type": "object"
 			}
 		});
 

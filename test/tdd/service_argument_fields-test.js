@@ -38,8 +38,7 @@ describe('service_argument_fields:', function() {
 			}
 
 			Parameter1.argumentSchema = {
-				"type": "object",
-				"properties": {}
+				"type": "object"
 			}
 
 			Parameter2 = function(params) {
@@ -47,8 +46,7 @@ describe('service_argument_fields:', function() {
 			}
 
 			Parameter2.argumentSchema = {
-				"type": "object",
-				"properties": {}
+				"type": "object"
 			}
 		});
 
