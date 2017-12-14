@@ -119,6 +119,8 @@ describe('garbage-collection:', function() {
 			var exceptions = [];
 			var myAction = injektor.lookup('myAction', exceptions);
 
+			assert.isUndefined(myAction);
+
 			printExceptions(exceptions);
 
 			assert.equal(exceptions.length, 2);
@@ -187,6 +189,8 @@ describe('garbage-collection:', function() {
 
 			var exceptions = [];
 			var myAction = injektor.lookup('myAction', exceptions);
+
+			assert.isUndefined(myAction);
 
 			printExceptions(exceptions);
 
@@ -268,6 +272,8 @@ describe('garbage-collection:', function() {
 
 			var exceptions = [];
 			var myAction = injektor.lookup('myAction', exceptions);
+
+			assert.isUndefined(myAction);
 
 			printExceptions(exceptions);
 
