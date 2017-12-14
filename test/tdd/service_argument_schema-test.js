@@ -1,12 +1,12 @@
 'use strict';
 
 var Injektor = require('../../index.js');
-var debugx = require('../../lib/tracebug')('tdd:injektor:schema_annotation');
+var debugx = require('../../lib/tracebug')('tdd:injektor:service:argument_schema');
 var assert = require('chai').assert;
 var expect = require('chai').expect;
 var util = require('util');
 
-describe('schema_annotation:', function() {
+describe('service_argument_schema:', function() {
 	this.timeout(600000);
 
 	describe('define services and register objects', function() {
