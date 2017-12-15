@@ -29,13 +29,13 @@ MyResource.argumentSchema = {
   }
 };
 
-injektor.defineService('myResource', MyResource)
-    .registerObject('fullname', 'Peter Pan')
-    .registerObject('document', { 
-      type: 'Book',
-      content: 'Story about Peter and Wendy',
-      price: 17.7
-    });
+injektor
+  .defineService('myResource', MyResource)
+  .registerObject('fullname', 'Peter Pan')
+  .registerObject('document', { 
+    type: 'Book',
+    content: 'Story about Peter and Wendy',
+    price: 17.7
+  });
 
 injektor.lookup('myResource').process('open');
-
