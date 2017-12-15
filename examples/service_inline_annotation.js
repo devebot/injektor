@@ -7,13 +7,13 @@ injektor
   .defineService('myResource', ['fullname', 'document',
     function(name, doc) {
       this.process = function(action) {
-        console.log('The developer %s will %s the document %s', 
+        console.log('The developer %s will %s the document %s',
             name, action, JSON.stringify(doc));
       };
     }
   ])
   .registerObject('fullname', 'Peter Pan')
-  .registerObject('document', { 
+  .registerObject('document', {
     type: 'Book',
     content: 'Story about Peter and Wendy',
     price: 17.7

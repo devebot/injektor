@@ -12,9 +12,9 @@
     "url": "git+https://github.com/devebot/injektor.git"
   },
   "keywords": [
+    "devebot",
     "dependency",
-    "injection",
-    "devebot"
+    "injection"
   ],
   "author": {
     "name": "Hung Pham",
@@ -32,6 +32,6 @@
     "sinon": "^1.17.3"
   },
   "dependencies": {
-    "jsonschema": "^1.0.2"
+    "jsonschema": "^1.2.2"
   }
 }

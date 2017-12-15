@@ -7,9 +7,9 @@ var MyResource = function(params) {
   params = params || {};
   var fullname = params.fullname;
   var document = params.document;
-  
+
   this.process = function(action) {
-    console.log('The developer %s will %s the document %s', 
+    console.log('The developer %s will %s the document %s',
         fullname, action, JSON.stringify(document));
   };
 };
@@ -18,7 +18,7 @@ MyResource.argumentSchema = {
   "type": "object",
   "properties": {
     "fullname": { "type": "string" },
-    "document": { 
+    "document": {
       "type": "object",
       "properties": {
         "type": { "type": "string" },
@@ -32,7 +32,7 @@ MyResource.argumentSchema = {
 injektor
   .defineService('myResource', MyResource)
   .registerObject('fullname', 'Peter Pan')
-  .registerObject('document', { 
+  .registerObject('document', {
     type: 'Book',
     content: 'Story about Peter and Wendy',
     price: 17.7
