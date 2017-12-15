@@ -102,6 +102,37 @@ injektor.lookup('myResource').process('open');
 
 The Console will display the text: 'The developer Peter Pan will open the document {"type":"Book","content":"Peter and Wendy"}'.
 
+### Object properties annotation
+
+```javascript
+var Injektor = require('injektor');
+var injektor = new Injektor();
+
+var MyResource = function(params) {
+  params = params || {};
+  var fullname = params.fullname;
+  var document = params.document;
+
+  this.process = function(action) {
+    console.log('The developer %s will %s the document %s',
+        fullname, action, JSON.stringify(document));
+  };
+};
+
+MyResource.argumentProperties = [ "fullname", "document" ];
+
+injektor.defineService('myResource', MyResource)
+    .registerObject('fullname', 'Peter Pan')
+    .registerObject('document', {
+      type: 'Book',
+      content: 'Peter and Wendy'
+    });
+
+injektor.lookup('myResource').process('open');
+```
+
+The Console will display the text: 'The developer Peter Pan will open the document {"type":"Book","content":"Peter and Wendy"}'.
+
 ### Explicit name annotation
 
 ```javascript
