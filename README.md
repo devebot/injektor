@@ -63,9 +63,9 @@ Hello Injektor. I'm Computer
 Wellcome to Vietnam
 ```
 
-## Dependency Annotions
+## Dependency Annotations
 
-### Annotation by schema
+### Object schema annotation
 
 ```javascript
 var Injektor = require('injektor');
@@ -102,25 +102,57 @@ injektor.lookup('myResource').process('open');
 
 The Console will display the text: 'The developer Peter Pan will open the document {"type":"Book","content":"Peter and Wendy"}'.
 
+### Explicit name annotation
+
+```javascript
+var Injektor = require('injektor');
+var injektor = new Injektor();
+
+injektor
+  .defineService('recipe', ['steps', 'object',
+    function(steps, object) {
+      steps = steps || [];
+      this.action = function(name) {
+        console.log('Hello, the instruction of %s is:', name);
+        steps.forEach(function(step) {
+          console.log(' - %s the %s', step, object);
+        });
+      };
+    }
+  ])
+  .registerObject('steps', [
+    'clean', 'boil', 'peel', 'eat'
+  ])
+  .registerObject('object', 'Eggs');
+
+injektor
+  .invoke(['recipe', function(rp) {
+    rp.action('Peter Pan');
+  }]);
+```
+
 ### Implicit name annotation
 
 ```javascript
 var Injektor = require('injektor');
 var injektor = new Injektor();
 
-injektor.defineService('recipe', function(steps, object) {
-  steps = steps || [];
-  this.action = function(name) {
-    console.log('Hello, the instruction of %s is:', name);
-    steps.forEach(function(step) {
-      console.log(' - %s the %s', step, object);
-    });
-  };
-});
+injektor
+  .defineService('recipe', function(steps, object) {
+    steps = steps || [];
+    this.action = function(name) {
+      console.log('Hello, the instruction of %s is:', name);
+      steps.forEach(function(step) {
+        console.log(' - %s the %s', step, object);
+      });
+    };
+  });
 
-injektor.registerObject('steps', [
-  'clean', 'boil', 'peel', 'eat'
-]).registerObject('object', 'Eggs');
+injektor
+  .registerObject('steps', [
+    'clean', 'boil', 'peel', 'eat'
+  ])
+  .registerObject('object', 'Eggs');
 
 injektor.lookup('recipe').action('Peter Pan');
 ```
