@@ -34,7 +34,9 @@ describe('service_argument_schema:', function() {
 			MyAction.argumentSchema = {
 				"type": "object",
 				"properties": {
-					"name": { "type": "string" },
+					"name": {
+						"type": "string"
+					},
 					"payload": {
 						"type": "object",
 						"properties": {
@@ -44,12 +46,10 @@ describe('service_argument_schema:', function() {
 						}
 					},
 					"parameter1": {
-						"type": "object",
-						"properties": {}
+						"type": "object"
 					},
 					"parameter2": {
-						"type": "object",
-						"properties": {}
+						"type": "object"
 					}
 				}
 			};
@@ -72,15 +72,16 @@ describe('service_argument_schema:', function() {
 		});
 
 		it('lookup a service with dependencies successfully', function() {
-			injektor.defineService('myAction', MyAction)
-			.registerObject('name', 'Peter Pan')
-			.registerObject('payload', {
-				type: 'Book',
-				content: 'Story about Peter and Wendy',
-				price: 17.7
-			})
-			.defineService('parameter1', Parameter1)
-			.defineService('parameter2', Parameter2);
+			injektor
+				.defineService('myAction', MyAction)
+				.registerObject('name', 'Peter Pan')
+				.registerObject('payload', {
+					type: 'Book',
+					content: 'Story about Peter and Wendy',
+					price: 17.7
+				})
+				.defineService('parameter1', Parameter1)
+				.defineService('parameter2', Parameter2);
 
 			var exceptions = [];
 			var myAction = injektor.lookup('myAction', exceptions);

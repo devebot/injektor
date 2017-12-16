@@ -28,7 +28,9 @@ describe('garbage-collection:', function() {
 			MyAction.argumentSchema = {
 				"type": "object",
 				"properties": {
-					"name": { "type": "string" },
+					"name": {
+						"type": "string"
+					},
 					"payload": { 
 						"type": "object",
 						"properties": {
@@ -46,13 +48,14 @@ describe('garbage-collection:', function() {
 		});
 
 		it('push exception if service is not defined', function() {
-			injektor.defineService('myAction', MyAction)
-			.registerObject('name', 'insertDocument')
-			.registerObject('payload', { 
-				type: 'Book',
-				content: 'Story about Peter and Wendy',
-				price: 17.7
-			});
+			injektor
+				.defineService('myAction', MyAction)
+				.registerObject('name', 'insertDocument')
+				.registerObject('payload', { 
+					type: 'Book',
+					content: 'Story about Peter and Wendy',
+					price: 17.7
+				});
 
 			var exceptions = [];
 			var myAction = injektor.lookup('myAction', exceptions);
@@ -86,7 +89,9 @@ describe('garbage-collection:', function() {
 			MyAction.argumentSchema = {
 				"type": "object",
 				"properties": {
-					"name": { "type": "string" },
+					"name": {
+						"type": "string"
+					},
 					"payload": { 
 						"type": "object",
 						"properties": {
@@ -96,25 +101,24 @@ describe('garbage-collection:', function() {
 						}
 					},
 					"dependency1": {
-						"type": "object",
-						"properties": {}
+						"type": "object"
 					},
 					"dependency2": {
-						"type": "object",
-						"properties": {}
+						"type": "object"
 					}
 				}
 			};
 		});
 
 		it('push exception if service is not defined', function() {
-			injektor.defineService('myAction', MyAction)
-			.registerObject('name', 'insertDocument')
-			.registerObject('payload', { 
-				type: 'Book',
-				content: 'Story about Peter and Wendy',
-				price: 17.7
-			});
+			injektor
+				.defineService('myAction', MyAction)
+				.registerObject('name', 'insertDocument')
+				.registerObject('payload', { 
+					type: 'Book',
+					content: 'Story about Peter and Wendy',
+					price: 17.7
+				});
 
 			var exceptions = [];
 			var myAction = injektor.lookup('myAction', exceptions);
@@ -150,7 +154,9 @@ describe('garbage-collection:', function() {
 			MyAction.argumentSchema = {
 				"type": "object",
 				"properties": {
-					"name": { "type": "string" },
+					"name": {
+						"type": "string"
+					},
 					"payload": { 
 						"type": "object",
 						"properties": {
@@ -160,8 +166,7 @@ describe('garbage-collection:', function() {
 						}
 					},
 					"parameter1": {
-						"type": "object",
-						"properties": {}
+						"type": "object"
 					}
 				}
 			};
@@ -178,14 +183,15 @@ describe('garbage-collection:', function() {
 		});
 
 		it('push exception if service constructor has failed', function() {
-			injektor.defineService('myAction', MyAction)
-			.registerObject('name', 'insertDocument')
-			.registerObject('payload', { 
-				type: 'Book',
-				content: 'Story about Peter and Wendy',
-				price: 17.7
-			})
-			.defineService('parameter1', Parameter1);
+			injektor
+				.defineService('myAction', MyAction)
+				.registerObject('name', 'insertDocument')
+				.registerObject('payload', {
+					type: 'Book',
+					content: 'Story about Peter and Wendy',
+					price: 17.7
+				})
+				.defineService('parameter1', Parameter1);
 
 			var exceptions = [];
 			var myAction = injektor.lookup('myAction', exceptions);
@@ -218,7 +224,9 @@ describe('garbage-collection:', function() {
 			MyAction.argumentSchema = {
 				"type": "object",
 				"properties": {
-					"name": { "type": "string" },
+					"name": {
+						"type": "string"
+					},
 					"payload": { 
 						"type": "object",
 						"properties": {
@@ -228,12 +236,10 @@ describe('garbage-collection:', function() {
 						}
 					},
 					"parameter1": {
-						"type": "object",
-						"properties": {}
+						"type": "object"
 					},
 					"parameter2": {
-						"type": "object",
-						"properties": {}
+						"type": "object"
 					}
 				}
 			};
@@ -244,8 +250,7 @@ describe('garbage-collection:', function() {
 			}
 
 			Parameter1.argumentSchema = {
-				"type": "object",
-				"properties": {}
+				"type": "object"
 			}
 
 			Parameter2 = function(params) {
@@ -254,21 +259,21 @@ describe('garbage-collection:', function() {
 			}
 
 			Parameter2.argumentSchema = {
-				"type": "object",
-				"properties": {}
+				"type": "object"
 			}
 		});
 
 		it('push exception if service constructor has failed', function() {
-			injektor.defineService('myAction', MyAction)
-			.registerObject('name', 'insertDocument')
-			.registerObject('payload', { 
-				type: 'Book',
-				content: 'Story about Peter and Wendy',
-				price: 17.7
-			})
-			.defineService('parameter1', Parameter1)
-			.defineService('parameter2', Parameter2);
+			injektor
+				.defineService('myAction', MyAction)
+				.registerObject('name', 'insertDocument')
+				.registerObject('payload', {
+					type: 'Book',
+					content: 'Story about Peter and Wendy',
+					price: 17.7
+				})
+				.defineService('parameter1', Parameter1)
+				.defineService('parameter2', Parameter2);
 
 			var exceptions = [];
 			var myAction = injektor.lookup('myAction', exceptions);
