@@ -1,6 +1,7 @@
 'use strict';
 
 var Injektor = require('../../index.js');
+var chores = require('../../lib/chores');
 var debugx = require('../../lib/tracebug')('tdd:injektor:garbage_collection');
 var assert = require('chai').assert;
 var expect = require('chai').expect;
@@ -62,7 +63,7 @@ describe('garbage-collection:', function() {
 
 			assert.isUndefined(myAction);
 
-			printExceptions(exceptions);
+			chores.printExceptions(exceptions);
 
 			assert.equal(exceptions.length, 1);
 			assert.instanceOf(exceptions[0], Error);
@@ -125,7 +126,7 @@ describe('garbage-collection:', function() {
 
 			assert.isUndefined(myAction);
 
-			printExceptions(exceptions);
+			chores.printExceptions(exceptions);
 
 			assert.equal(exceptions.length, 2);
 			assert.instanceOf(exceptions[0], Error);
@@ -198,7 +199,7 @@ describe('garbage-collection:', function() {
 
 			assert.isUndefined(myAction);
 
-			printExceptions(exceptions);
+			chores.printExceptions(exceptions);
 
 			assert.equal(exceptions.length, 1);
 			assert.instanceOf(exceptions[0], Error);
@@ -280,7 +281,7 @@ describe('garbage-collection:', function() {
 
 			assert.isUndefined(myAction);
 
-			printExceptions(exceptions);
+			chores.printExceptions(exceptions);
 
 			assert.equal(exceptions.length, 2);
 			assert.instanceOf(exceptions[0], Error);
@@ -288,12 +289,3 @@ describe('garbage-collection:', function() {
 		});
 	});
 });
-
-var printExceptions = function(exceptions) {
-	exceptions = exceptions || [];
-	exceptions.forEach(function(err, index) {
-		debugx.enabled && debugx('Error#%s', index);
-		debugx.enabled && console.log('  name: %s\n  message: "%s"\n  stack: %s',
-			err.name, err.message, err.stack);
-	});
-}

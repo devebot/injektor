@@ -6,10 +6,10 @@ var assert = require('chai').assert;
 var expect = require('chai').expect;
 var util = require('util');
 
-describe('service_reference_array:', function() {
+describe('defineService:', function() {
 	this.timeout(600000);
 
-	describe('define services and register objects', function() {
+	describe('service_reference_array', function() {
 		var injektor, MyAction, Parameter1, Parameter2;
 
 		before(function() {
