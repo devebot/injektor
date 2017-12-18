@@ -211,12 +211,72 @@ describe('defineService:', function() {
 				.defineService('foo/second3', FooSecond3);
 		});
 
-		it('lookup a service with name resolution using scopes', function() {
+		it('define service with scope in name, lookup by default name', function() {
+			injektor.defineService('foo/myAction', MyAction);
+
+			var exceptions = [];
+			var myAction = injektor.lookup('myAction', exceptions);
+
+			assert.equal(exceptions.length, 0);
+			assert.isNotNull(myAction);
+			assert.deepInclude(myAction, expectedAction);
+		});
+
+		it('define service with scope in name, lookup by scope in name', function() {
 			injektor.defineService('foo/myAction', MyAction);
 
 			var exceptions = [];
 			var myAction = injektor.lookup('foo/myAction', exceptions);
-			debugx.enabled && console.log(JSON.stringify(myAction, null, 4));
+
+			assert.equal(exceptions.length, 0);
+			assert.isNotNull(myAction);
+			assert.deepInclude(myAction, expectedAction);
+		});
+
+		it('define service with scope in name, lookup by scope in context', function() {
+			injektor.defineService('foo/myAction', MyAction);
+
+			var exceptions = [];
+			var myAction = injektor.lookup('myAction', {
+				scope: 'foo',
+				excpetions: exceptions
+			});
+
+			assert.equal(exceptions.length, 0);
+			assert.isNotNull(myAction);
+			assert.deepInclude(myAction, expectedAction);
+		});
+
+		it('define service with scope in context, lookup by scope in name', function() {
+			injektor.defineService('myAction', MyAction, { scope: 'foo' });
+
+			var exceptions = [];
+			var myAction = injektor.lookup('foo/myAction', exceptions);
+
+			assert.equal(exceptions.length, 0);
+			assert.isNotNull(myAction);
+			assert.deepInclude(myAction, expectedAction);
+		});
+
+		it('define service with scope in context, lookup by scope in context', function() {
+			injektor.defineService('myAction', MyAction, { scope: 'foo' });
+
+			var exceptions = [];
+			var myAction = injektor.lookup('myAction', {
+				scope: 'foo',
+				excpetions: exceptions
+			});
+
+			assert.equal(exceptions.length, 0);
+			assert.isNotNull(myAction);
+			assert.deepInclude(myAction, expectedAction);
+		});
+
+		it('define service with scope in context, lookup by default name', function() {
+			injektor.defineService('myAction', MyAction, { scope: 'foo' });
+
+			var exceptions = [];
+			var myAction = injektor.lookup('myAction', exceptions);
 
 			assert.equal(exceptions.length, 0);
 			assert.isNotNull(myAction);
