@@ -10,7 +10,7 @@ describe('defineService:', function() {
 	this.timeout(600000);
 
 	describe('service_argument_fields', function() {
-		var injektor, MyAction, Parameter1, Parameter2;
+		var injektor, MyAction, First1, First2;
 
 		before(function() {
 			injektor = new Injektor();
@@ -31,21 +31,21 @@ describe('defineService:', function() {
 				});
 			};
 
-			MyAction.argumentProperties = ['name', 'payload', 'parameter1', 'parameter2'];
+			MyAction.argumentProperties = ['name', 'payload', 'first1', 'first2'];
 
-			Parameter1 = function(params) {
+			First1 = function(params) {
 				var x1 = 100;
 			}
 
-			Parameter1.argumentSchema = {
+			First1.argumentSchema = {
 				"type": "object"
 			}
 
-			Parameter2 = function(params) {
+			First2 = function(params) {
 				var x2 = 100;
 			}
 
-			Parameter2.argumentSchema = {
+			First2.argumentSchema = {
 				"type": "object"
 			}
 		});
@@ -59,8 +59,8 @@ describe('defineService:', function() {
 					content: 'Story about Peter and Wendy',
 					price: 17.7
 				})
-				.defineService('parameter1', Parameter1)
-				.defineService('parameter2', Parameter2);
+				.defineService('first1', First1)
+				.defineService('first2', First2);
 
 			var exceptions = [];
 			var myAction = injektor.lookup('myAction', exceptions);
@@ -75,8 +75,8 @@ describe('defineService:', function() {
 					content: 'Story about Peter and Wendy',
 					price: 17.7
 				},
-				parameter1: {},
-				parameter2: {}
+				first1: {},
+				first2: {}
 			});
 
 			var msg = myAction.process('insertDocument');
@@ -86,8 +86,8 @@ describe('defineService:', function() {
 
 	describe('service_argument_fields_with_scope', function() {
 		var injektor, MyAction;
-		var TopParameter1, TopParameter2, TopSub1, TopSub2, TopSub3;
-		var ChildParameter1, ChildParameter2, ChildSub1, ChildSub2;
+		var FooFirst1, FooFirst2, FooSecond1, FooSecond2, FooSecond3;
+		var BarFirst1, BarFirst2, BarSecond1, BarSecond2;
 
 		before(function() {
 			injektor = new Injektor();
@@ -95,81 +95,81 @@ describe('defineService:', function() {
 				this.injected = params;
 			};
 
-			MyAction.argumentProperties = ['name', 'payload', 'parameter1', 'child/parameter2'];
+			MyAction.argumentProperties = ['name', 'payload', 'first1', 'bar/first2'];
 
-			TopParameter1 = function(params) {
-				this.name = "top/parameter1";
-				this.argumentProperties = TopParameter1.argumentProperties;
+			FooFirst1 = function(params) {
+				this.name = "foo/first1";
+				this.argumentProperties = FooFirst1.argumentProperties;
 				this.injected = params;
 			}
-			TopParameter1.argumentProperties = ['sub1', 'child/sub2']
+			FooFirst1.argumentProperties = ['second1', 'bar/second2']
 
-			TopParameter2 = function(params) {
-				this.name = "top/parameter2";
-				this.argumentProperties = TopParameter2.argumentProperties;
+			FooFirst2 = function(params) {
+				this.name = "foo/first2";
+				this.argumentProperties = FooFirst2.argumentProperties;
 				this.injected = params;
 			}
-			TopParameter2.argumentProperties = ['child/sub1', 'sub2']
+			FooFirst2.argumentProperties = ['bar/second1', 'second2']
 
-			TopSub1 = function(params) {
-				this.name = "top/sub1";
+			FooSecond1 = function(params) {
+				this.name = "foo/second1";
 			}
-			TopSub1.argumentProperties = [];
+			FooSecond1.argumentProperties = [];
 
-			TopSub2 = function(params) {
-				this.name = "top/sub2";
+			FooSecond2 = function(params) {
+				this.name = "foo/second2";
 			}
-			TopSub2.argumentProperties = [];
+			FooSecond2.argumentProperties = [];
 
-			TopSub3 = function(params) {
-				this.name = "top/sub3";
+			FooSecond3 = function(params) {
+				this.name = "foo/second3";
 			}
-			TopSub3.argumentProperties = [];
+			FooSecond3.argumentProperties = [];
 
-			ChildParameter1 = function(params) {
-				this.name = "child/parameter1";
-				this.argumentProperties = ChildParameter1.argumentProperties;
+			BarFirst1 = function(params) {
+				this.name = "bar/first1";
+				this.argumentProperties = BarFirst1.argumentProperties;
 				this.injected = params;
 			}
-			ChildParameter1.argumentProperties = ['top/sub1', 'sub2']
+			BarFirst1.argumentProperties = ['foo/second1', 'second2']
 
-			ChildParameter2 = function(params) {
-				this.name = "child/parameter2";
-				this.argumentProperties = ChildParameter2.argumentProperties;
+			BarFirst2 = function(params) {
+				this.name = "bar/first2";
+				this.argumentProperties = BarFirst2.argumentProperties;
 				this.injected = params;
 			}
-			ChildParameter2.argumentProperties = ['sub1', 'top/sub2', 'sub3']
+			BarFirst2.argumentProperties = ['second1', 'foo/second2', 'second3']
 
-			ChildSub1 = function() {
-				this.name = "child/sub1";
+			BarSecond1 = function() {
+				this.name = "bar/second1";
 			}
 
-			ChildSub2 = function() {
-				this.name = "child/sub2";
+			BarSecond2 = function() {
+				this.name = "bar/second2";
 			}
 		});
 
 		it('lookup a service with name resolution using scopes', function() {
 			injektor
-				.defineService('top/myAction', MyAction)
+				.defineService('foo/myAction', MyAction)
 				.registerObject('name', 'Peter Pan')
 				.registerObject('payload', {
 					type: 'Book',
 					content: 'Story about Peter and Wendy',
 					price: 17.7
 				})
-				.defineService('child/sub1', ChildSub1)
-				.defineService('child/sub2', ChildSub2)
-				.defineService('child/parameter1', ChildParameter1)
-				.defineService('child/parameter2', ChildParameter2)
-				.defineService('top/parameter1', TopParameter1)
-				.defineService('top/parameter2', TopParameter2)
-				.defineService('top/sub1', TopSub1)
-				.defineService('top/sub2', TopSub2)
-				.defineService('top/sub3', TopSub3);
+				.defineService('bar/second1', BarSecond1)
+				.defineService('bar/second2', BarSecond2)
+				.defineService('bar/first1', BarFirst1)
+				.defineService('bar/first2', BarFirst2)
+				.defineService('foo/first1', FooFirst1)
+				.defineService('foo/first2', FooFirst2)
+				.defineService('foo/second1', FooSecond1)
+				.defineService('foo/second2', FooSecond2)
+				.defineService('foo/second3', FooSecond3);
 
 			var exceptions = [];
-			var myAction = injektor.lookup('top/myAction', exceptions);
+			var myAction = injektor.lookup('foo/myAction', exceptions);
 
 			assert.equal(exceptions.length, 0);
 			assert.isNotNull(myAction);
@@ -184,37 +184,37 @@ describe('defineService:', function() {
 						"content": "Story about Peter and Wendy",
 						"price": 17.7
 					},
-					"parameter1": {
-						"name": "top/parameter1",
+					"first1": {
+						"name": "foo/first1",
 						"argumentProperties": [
-							"sub1",
-							"child/sub2"
+							"second1",
+							"bar/second2"
 						],
 						"injected": {
-							"sub1": {
-								"name": "top/sub1"
+							"second1": {
+								"name": "foo/second1"
 							},
-							"child/sub2": {
-								"name": "child/sub2"
+							"bar/second2": {
+								"name": "bar/second2"
 							}
 						}
 					},
-					"child/parameter2": {
-						"name": "child/parameter2",
+					"bar/first2": {
+						"name": "bar/first2",
 						"argumentProperties": [
-							"sub1",
-							"top/sub2",
-							"sub3"
+							"second1",
+							"foo/second2",
+							"second3"
 						],
 						"injected": {
-							"sub1": {
-								"name": "child/sub1"
+							"second1": {
+								"name": "bar/second1"
 							},
-							"top/sub2": {
-								"name": "top/sub2"
+							"foo/second2": {
+								"name": "foo/second2"
 							},
-							"sub3": {
-								"name": "top/sub3"
+							"second3": {
+								"name": "foo/second3"
 							}
 						}
 					}
