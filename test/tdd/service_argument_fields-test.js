@@ -85,11 +85,11 @@ describe('defineService:', function() {
 	});
 
 	describe('service_argument_fields_with_scope', function() {
-		var injektor, MyAction;
+		var injektor, MyAction, expectedAction;
 		var FooFirst1, FooFirst2, FooSecond1, FooSecond2, FooSecond3;
 		var BarFirst1, BarFirst2, BarSecond1, BarSecond2;
 
-		before(function() {
+		beforeEach(function() {
 			injektor = new Injektor();
 			MyAction = function(params) {
 				this.injected = params;
@@ -147,36 +147,8 @@ describe('defineService:', function() {
 			BarSecond2 = function() {
 				this.name = "bar/second2";
 			}
-		});
 
-		it('lookup a service with name resolution using scopes', function() {
-			injektor
-				.defineService('foo/myAction', MyAction)
-				.registerObject('name', 'Peter Pan')
-				.registerObject('payload', {
-					type: 'Book',
-					content: 'Story about Peter and Wendy',
-					price: 17.7
-				})
-				.defineService('bar/second1', BarSecond1)
-				.defineService('bar/second2', BarSecond2)
-				.defineService('bar/first1', BarFirst1)
-				.defineService('bar/first2', BarFirst2)
-				.defineService('foo/first1', FooFirst1)
-				.defineService('foo/first2', FooFirst2)
-				.defineService('foo/second1', FooSecond1)
-				.defineService('foo/second2', FooSecond2)
-				.defineService('foo/second3', FooSecond3);
-
-			var exceptions = [];
-			var myAction = injektor.lookup('foo/myAction', exceptions);
-
-			assert.equal(exceptions.length, 0);
-			assert.isNotNull(myAction);
-
-			debugx.enabled && console.log(JSON.stringify(myAction, null, 4));
-
-			assert.deepInclude(myAction, {
+			expectedAction = {
 				"injected": {
 					"name": "Peter Pan",
 					"payload": {
@@ -219,7 +191,36 @@ describe('defineService:', function() {
 						}
 					}
 				}
-			});
+			}
+
+			injektor
+				.registerObject('name', 'Peter Pan')
+				.registerObject('payload', {
+					type: 'Book',
+					content: 'Story about Peter and Wendy',
+					price: 17.7
+				})
+				.defineService('bar/second1', BarSecond1)
+				.defineService('bar/second2', BarSecond2)
+				.defineService('bar/first1', BarFirst1)
+				.defineService('bar/first2', BarFirst2)
+				.defineService('foo/first1', FooFirst1)
+				.defineService('foo/first2', FooFirst2)
+				.defineService('foo/second1', FooSecond1)
+				.defineService('foo/second2', FooSecond2)
+				.defineService('foo/second3', FooSecond3);
+		});
+
+		it('lookup a service with name resolution using scopes', function() {
+			injektor.defineService('foo/myAction', MyAction);
+
+			var exceptions = [];
+			var myAction = injektor.lookup('foo/myAction', exceptions);
+			debugx.enabled && console.log(JSON.stringify(myAction, null, 4));
+
+			assert.equal(exceptions.length, 0);
+			assert.isNotNull(myAction);
+			assert.deepInclude(myAction, expectedAction);
 		});
 	});
 });
