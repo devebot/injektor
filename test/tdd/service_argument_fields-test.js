@@ -1,7 +1,7 @@
 'use strict';
 
 var Injektor = require('../../index.js');
-var debugx = require('../../lib/tracebug')('tdd:injektor:service:argument_fields');
+var debugx = require('../../lib/pinbug')('tdd:injektor:service:argument_fields');
 var assert = require('chai').assert;
 var expect = require('chai').expect;
 var util = require('util');

@@ -2,7 +2,7 @@
 
 var Injektor = require('../../index.js');
 var chores = require('../../lib/chores');
-var debugx = require('../../lib/tracebug')('tdd:injektor:garbage_collection');
+var debugx = require('../../lib/pinbug')('tdd:injektor:garbage_collection');
 var assert = require('chai').assert;
 var expect = require('chai').expect;
 
