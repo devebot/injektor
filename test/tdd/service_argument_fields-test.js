@@ -88,6 +88,7 @@ describe('defineService:', function() {
 		var injektor, MyAction, expectedAction;
 		var FooFirst1, FooFirst2, FooSecond1, FooSecond2, FooSecond3;
 		var BarFirst1, BarFirst2, BarSecond1, BarSecond2;
+		var NoScopeFirst, NoScopeSecond;
 
 		beforeEach(function() {
 			injektor = new Injektor();
@@ -95,14 +96,16 @@ describe('defineService:', function() {
 				this.injected = params;
 			};
 
-			MyAction.argumentProperties = ['name', 'payload', 'first1', 'bar/first2'];
+			MyAction.argumentProperties = [
+				'name', 'payload', 'first1', 'bar/first2', 'noScopeFirst'
+			];
 
 			FooFirst1 = function(params) {
 				this.name = "foo/first1";
 				this.argumentProperties = FooFirst1.argumentProperties;
 				this.injected = params;
 			}
-			FooFirst1.argumentProperties = ['second1', 'bar/second2']
+			FooFirst1.argumentProperties = ['second1', 'bar/second2', 'noScopeSecond']
 
 			FooFirst2 = function(params) {
 				this.name = "foo/first2";
@@ -148,6 +151,18 @@ describe('defineService:', function() {
 				this.name = "bar/second2";
 			}
 
+			NoScopeFirst = function(params) {
+				this.name = "noScopeFirst";
+				this.argumentProperties = NoScopeFirst.argumentProperties;
+				this.injected = params;
+			}
+			NoScopeFirst.argumentProperties = [ 'noScopeSecond' ]
+
+			NoScopeSecond = function(params) {
+				this.name = "noScopeSecond";
+			}
+			NoScopeSecond.argumentProperties = [];
+
 			expectedAction = {
 				"injected": {
 					"name": "Peter Pan",
@@ -160,7 +175,8 @@ describe('defineService:', function() {
 						"name": "foo/first1",
 						"argumentProperties": [
 							"second1",
-							"bar/second2"
+							"bar/second2",
+							"noScopeSecond"
 						],
 						"injected": {
 							"second1": {
@@ -168,6 +184,9 @@ describe('defineService:', function() {
 							},
 							"bar/second2": {
 								"name": "bar/second2"
+							},
+							"noScopeSecond": {
+								"name": "noScopeSecond"
 							}
 						}
 					},
@@ -189,6 +208,17 @@ describe('defineService:', function() {
 								"name": "foo/second3"
 							}
 						}
+					},
+					"noScopeFirst": {
+						"name": "noScopeFirst",
+						"argumentProperties": [
+							"noScopeSecond"
+						],
+						"injected": {
+							"noScopeSecond": {
+								"name": "noScopeSecond"
+							}
+						}
 					}
 				}
 			}
@@ -208,7 +238,9 @@ describe('defineService:', function() {
 				.defineService('foo/first2', FooFirst2)
 				.defineService('foo/second1', FooSecond1)
 				.defineService('foo/second2', FooSecond2)
-				.defineService('foo/second3', FooSecond3);
+				.defineService('foo/second3', FooSecond3)
+				.defineService('noScopeFirst', NoScopeFirst)
+				.defineService('noScopeSecond', NoScopeSecond);
 		});
 
 		it('define service with scope in name, lookup by default name', function() {
