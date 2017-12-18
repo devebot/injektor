@@ -174,7 +174,7 @@ describe('defineService:', function() {
 			assert.equal(exceptions.length, 0);
 			assert.isNotNull(myAction);
 
-			console.log(JSON.stringify(myAction, null, 4));
+			debugx.enabled && console.log(JSON.stringify(myAction, null, 4));
 
 			assert.deepInclude(myAction, {
 				"injected": {
