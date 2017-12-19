@@ -9,13 +9,8 @@ var expect = require('chai').expect;
 describe('Name validation:', function() {
   this.timeout(600000);
 
-  var injektor;
-
-  beforeEach(function() {
-    injektor = new Injektor();
-  });
-
   it('the first character must be a alphabet letter', function() {
+    var injektor = new Injektor();
     var codeOfa = 'a'.charCodeAt(0);
     var codeOfA = 'A'.charCodeAt(0);
     for(var i=0; i<26; i++) {
@@ -37,9 +32,29 @@ describe('Name validation:', function() {
   });
 
   it('accept "-" and "_" characters', function() {
+    var injektor = new Injektor();
     var name = 'a-bcd-efg_Service';
     injektor.registerObject(name, 17779);
     assert.equal(17779, injektor.lookup(name));
+  });
+
+  it('does not allow duplicate relative name by default', function() {
+    var injektor = new Injektor();
+    injektor.registerObject('module1/duplicatedName', 'Object1');
+    injektor.registerObject('module2/duplicatedName', 'Object2');
+    assert.throws(function() {
+      injektor.lookup('duplicatedName');
+    }, Injektor.errors.DuplicatedRelativeNameError,
+        'name [duplicatedName] is duplicated');
+  });
+
+  it('set isRelativeNameDuplicated to allow duplicate relative name', function() {
+    var injektor = new Injektor({
+      isRelativeNameDuplicated: true
+    });
+    injektor.registerObject('module1/duplicatedName', 'Object1');
+    injektor.registerObject('module2/duplicatedName', 'Object2');
+    assert.equal(injektor.lookup('duplicatedName'), 'Object1');
   });
 });
 
