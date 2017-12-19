@@ -38,6 +38,44 @@ describe('Name validation:', function() {
     assert.equal(17779, injektor.lookup(name));
   });
 
+  describe('provide scopes in both name and context', function() {
+    var injektor;
+    var checkOutput = function(p1, p2, p3) {
+      var params = {name: p1, action: p2, data: p3};
+      assert.deepEqual(params, {
+        "name": "Devebot Injektor",
+        "action": "lookup",
+        "data": {
+          "message": "This data has no scope"
+        }
+      });
+    };
+    beforeEach(function() {
+      injektor = new Injektor();
+      injektor.registerObject('myscope/name', 'Devebot Injektor');
+      injektor.registerObject('action', 'lookup', { scope: 'myscope' });
+      injektor.registerObject('data', {
+        message: 'This data has no scope'
+      });
+    });
+
+    it('case#1', function() {
+      injektor.invoke(['name', 'action', 'data', checkOutput]);
+    });
+
+    it('case#2', function() {
+      injektor.invoke(['myscope/name', 'myscope/action', 'data', checkOutput]);
+    });
+
+    it('case#3', function() {
+      injektor.invoke(['name', 'myscope/action', 'data', checkOutput]);
+    });
+
+    it('case#4', function() {
+      injektor.invoke(['myscope/name', 'action', 'data', checkOutput]);
+    });
+  });
+
   it('does not allow duplicate relative name by default', function() {
     var injektor = new Injektor();
     injektor.registerObject('module1/duplicatedName', 'Object1');
