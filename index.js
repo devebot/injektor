@@ -1,8 +1,5 @@
 'use strict';
 
 var Injektor = require('./lib/engine');
-var errors = require('./lib/errors');
-
-Injektor.errors = errors;
-
+Injektor.errors = require('./lib/errors');
 module.exports = Injektor;

@@ -1,6 +1,6 @@
 {
   "name": "injektor",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "description": "The simple dependency injection for Devebot",
   "main": "index.js",
   "scripts": {
