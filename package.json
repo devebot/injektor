@@ -41,6 +41,6 @@
     "mocha": "^4.1.0"
   },
   "dependencies": {
-    "jsonschema": "^1.2.2"
+    "ajv": "^6.2.0"
   }
 }
