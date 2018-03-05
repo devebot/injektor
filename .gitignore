@@ -1,7 +1,7 @@
-**/node_modules/
-doc/
-lib/
-.cache/
-.store/
-.idea/
+node_modules
+/doc
+/lib
+.cache
+.idea
+.store
 *.log
