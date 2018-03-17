@@ -201,33 +201,6 @@ var Injektor = function Injektor(params) {
     }
   }
 
-  function parseName(name, options) {
-    options = options || {};
-    var parts = name.split(config.separator);
-    if (parts.length === 1) {
-      if (options.scope) parts.unshift(options.scope);
-    }
-    if (parts.length === 0 || parts.length > 2) {
-      throw new errors.InvalidMethodArgumentError('invalid name format');
-    }
-    var nameRef = {
-      name: name,
-      absoluteName: parts.join(config.separator),
-      relativeName: parts[parts.length - 1],
-      scope: parts[parts.length - 2]
-    }
-    return nameRef;
-  }
-
-  function updateSuggestion(nameRef) {
-    if (nameRef.absoluteName != nameRef.relativeName) {
-      namestore[nameRef.relativeName] = namestore[nameRef.relativeName] || [];
-      if (namestore[nameRef.relativeName].indexOf(nameRef.absoluteName) < 0) {
-        namestore[nameRef.relativeName].push(nameRef.absoluteName);
-      }
-    }
-  }
-
   function extractScope(name, options) {
     options = options || {};
     var newopts = chores.cloneObject(options);
@@ -290,9 +263,9 @@ var Injektor = function Injektor(params) {
    */
   this.registerObject = function(name, dependency, options) {
     validateName(name);
-    var nameRef = parseName(name, options);
+    var nameRef = parseName(config, name, options);
     dependencies[nameRef.absoluteName] = {type: 'object', value: dependency};
-    updateSuggestion(nameRef);
+    updateSuggestion(namestore, nameRef);
     return this;
   };
 
@@ -308,9 +281,9 @@ var Injektor = function Injektor(params) {
     if (record.referenceNames) {
       record.serviceInit.referenceArray = record.referenceNames;
     }
-    var nameRef = parseName(name, options);
+    var nameRef = parseName(config, name, options);
     dependencies[nameRef.absoluteName] = {type: 'service', value: record.serviceInit};
-    updateSuggestion(nameRef);
+    updateSuggestion(namestore, nameRef);
     return this;
   };
 
@@ -379,3 +352,30 @@ var Injektor = function Injektor(params) {
 };
 
 module.exports = Injektor;
+
+function parseName(config, name, options) {
+  options = options || {};
+  var parts = name.split(config.separator);
+  if (parts.length === 1) {
+    if (options.scope) parts.unshift(options.scope);
+  }
+  if (parts.length === 0 || parts.length > 2) {
+    throw new errors.InvalidMethodArgumentError('invalid name format');
+  }
+  var nameRef = {
+    name: name,
+    absoluteName: parts.join(config.separator),
+    relativeName: parts[parts.length - 1],
+    scope: parts[parts.length - 2]
+  }
+  return nameRef;
+}
+
+function updateSuggestion(namestore, nameRef) {
+  if (nameRef.absoluteName != nameRef.relativeName) {
+    namestore[nameRef.relativeName] = namestore[nameRef.relativeName] || [];
+    if (namestore[nameRef.relativeName].indexOf(nameRef.absoluteName) < 0) {
+      namestore[nameRef.relativeName].push(nameRef.absoluteName);
+    }
+  }
+}
