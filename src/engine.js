@@ -8,11 +8,12 @@ var util = require('util');
 
 var noop = function() {};
 var ACCEPTED_SEPARATORS = ['/', ':', '@', '#', '$'];
-var NAME_PATTERN_TMPL = '^[a-zA-Z]{1}[a-zA-Z0-9\-_%s]*$';
+var NAME_PATTERN_TMPL = '^[a-zA-Z]{1}[a-zA-Z0-9&\\-_%s]*$';
 
 var defaultConfig = {
   argumentSchemaLabel: 'argumentSchema',
   argumentFieldsLabel: 'argumentProperties',
+  namePatternTemplate: NAME_PATTERN_TMPL,
   referenceArrayLabel: 'referenceArray',
   isDependencyCycleDetected: true,
   isRelativeNameDuplicated: false,
@@ -44,7 +45,7 @@ var Injektor = function Injektor(params) {
     }
   });
 
-  var namePatternStr = util.format(NAME_PATTERN_TMPL, config.separator);
+  var namePatternStr = util.format(config.namePatternTemplate, config.separator);
   debugx.enabled && debugx(' - namePattern: %s', namePatternStr);
 
   var namePattern = new RegExp(namePatternStr, 'g');
