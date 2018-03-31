@@ -62,7 +62,7 @@ var Injektor = function Injektor(params) {
   function retrieve(name, options, exceptions) {
     options = options || {};
     exceptions = exceptions || [];
-    name = resolveName(name, options);
+    name = resolveName(name, options, exceptions);
     options = extractScope(name, options);
     var record = dependencies[name];
     if (record == null) {
@@ -237,7 +237,7 @@ var Injektor = function Injektor(params) {
     }
   }
 
-  function resolveName(name, options) {
+  function resolveName(name, options, exceptions) {
     options = options || {};
     var resolvedName = name;
     if (dependencies[resolvedName] == null && options.scope) {
@@ -247,7 +247,12 @@ var Injektor = function Injektor(params) {
     if (dependencies[resolvedName] == null && namestore[name] && namestore[name].length > 0) {
       resolvedName = namestore[name][0];
       if (config.isRelativeNameDuplicated != true && namestore[name].length > 1) {
-        throw new errors.DuplicatedRelativeNameError('name [' + name + '] is duplicated');
+        var error = new errors.DuplicatedRelativeNameError('name [' + name + '] is duplicated');
+        if (exceptions instanceof Array) {
+          exceptions.push(error);
+        } else {
+          throw error;
+        }
       }
     }
     return resolvedName;
@@ -287,6 +292,13 @@ var Injektor = function Injektor(params) {
     return this;
   };
 
+  this.resolve = function(name, options) {
+    var context = Object.assign({}, options);
+    var exceptions = context.exceptions;
+    delete context.exceptions;
+    return resolveName(name, context, exceptions);
+  }
+
   this.suggest = function(name) {
     if (dependencies[name]) return [];
     if (namestore[name]) {
@@ -319,7 +331,7 @@ var Injektor = function Injektor(params) {
     var ref = retrieve(name, options, exceptions);
     if (!isManaged && exceptions.length > 0) {
       chores.printExceptions(exceptions);
-      throw new errors.DependencyCombinationError('lookup() is failed');
+      throw new errors.DependencyCombinationError('lookup() is failed', exceptions);
     }
     return ref;
   };
