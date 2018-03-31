@@ -63,7 +63,9 @@ var Injektor = function Injektor(params) {
     options = options || {};
     exceptions = exceptions || [];
     name = resolveName(name, options, exceptions);
-    options = extractScope(name, options);
+    if (typeof name === 'string') {
+      options = extractScope(name, options);
+    }
     var record = dependencies[name];
     if (record == null) {
       var exception = new errors.DependencyNotFoundError('No dependency registered with name: ' + name);
@@ -239,12 +241,13 @@ var Injektor = function Injektor(params) {
 
   function resolveName(name, options, exceptions) {
     options = options || {};
-    var resolvedName = name;
-    if (dependencies[resolvedName] == null && options.scope) {
-      var fullname = [options.scope, resolvedName].join(config.separator);
+    var resolvedName = null;
+    if (dependencies[name]) resolvedName = name;
+    if (resolvedName == null && options.scope) {
+      var fullname = [options.scope, name].join(config.separator);
       if (dependencies[fullname]) resolvedName = fullname;
     }
-    if (dependencies[resolvedName] == null && namestore[name] && namestore[name].length > 0) {
+    if (resolvedName == null && namestore[name] && namestore[name].length > 0) {
       resolvedName = namestore[name][0];
       if (config.isRelativeNameDuplicated != true && namestore[name].length > 1) {
         var error = new errors.DuplicatedRelativeNameError('name [' + name + '] is duplicated');
