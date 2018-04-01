@@ -322,12 +322,21 @@ var Injektor = function Injektor(params) {
     return this;
   };
 
+  this.parseName = function(name, options) {
+    var context = Object.assign({}, options);
+    var exceptions = context.exceptions;
+    delete context.exceptions;
+    return parseName(name, context, exceptions);
+  }
+
   this.resolve = function(name, options) {
     var context = Object.assign({}, options);
     var exceptions = context.exceptions;
     delete context.exceptions;
     return resolveName(name, context, exceptions);
   }
+
+  this.resolveName = this.resolve;
 
   this.suggest = function(name) {
     if (dependencies[name]) return [];
@@ -340,6 +349,8 @@ var Injektor = function Injektor(params) {
     }
     return null;
   }
+
+  this.suggestName = this.suggest;
 
   /**
    * Lookups a dependency (object or service) from store 
@@ -361,6 +372,7 @@ var Injektor = function Injektor(params) {
     var ref = retrieve(name, options, exceptions);
     if (!isManaged && exceptions.length > 0) {
       chores.printExceptions(exceptions);
+      if (exceptions.length === 1) throw exceptions[0];
       throw new errors.DependencyCombinationError('lookup() is failed', exceptions);
     }
     return ref;
@@ -380,7 +392,8 @@ var Injektor = function Injektor(params) {
     var paramArray = getDependencies(record.serviceInit, options, exceptions);
     if (exceptions.length > 0) {
       chores.printExceptions(exceptions);
-      throw new errors.DependencyCombinationError('invoke() is failed');
+      if (exceptions.length === 1) throw exceptions[0];
+      throw new errors.DependencyCombinationError('invoke() is failed', exceptions);
     }
     record.serviceInit.apply(null, paramArray);
   };
