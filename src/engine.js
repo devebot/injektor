@@ -62,19 +62,19 @@ var Injektor = function Injektor(params) {
   function retrieve(name, options, exceptions) {
     options = options || {};
     exceptions = exceptions || [];
-    name = resolveName(name, options, exceptions);
-    if (typeof name === 'string') {
-      options = extractScope(name, options);
+    var nameResolved = resolveName(name, options, exceptions);
+    if (typeof nameResolved === 'string') {
+      options = extractScope(nameResolved, options);
     }
-    var record = dependencies[name];
+    var record = dependencies[nameResolved];
     if (record == null) {
       var exception = new errors.DependencyNotFoundError('No dependency registered with name: ' + name);
       exceptions.push(exception);
       return undefined;
     }
-    config.isDependencyCycleDetected && checkinStacktrace(name, options);
-    record['cache'] = record['cache'] || convert(name, options, exceptions);
-    config.isDependencyCycleDetected && checkoutStacktrace(name, options);
+    config.isDependencyCycleDetected && checkinStacktrace(nameResolved, options);
+    record['cache'] = record['cache'] || convert(nameResolved, options, exceptions);
+    config.isDependencyCycleDetected && checkoutStacktrace(nameResolved, options);
     return record['cache'];
   }
 

@@ -13,8 +13,8 @@
   ],
   "scripts": {
     "build": "babel src -d lib",
-    "prepublish": "NODE_ENV=production npm run build",
-    "pretest": "NODE_ENV=test npm run build",
+    "prepublish": "NODE_ENV=${DEVEBOT_NODE_ENV:-production} npm run build",
+    "pretest": "NODE_ENV=${DEVEBOT_NODE_ENV:-test} npm run build",
     "test": "mocha --recursive test/**/*-test.js",
     "verify": "npm run prepublish && mocha --recursive test/**/*-test.js"
   },
